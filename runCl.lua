@@ -12,11 +12,12 @@ cmd:option('-epochs',100)
 cmd:option('-seed',1)
 cmd:option('-nexper',1,'number of experiments')
 cmd:option('-learningRate',0.01)
+cmd:option('-weightDecay',0)
 opt = cmd:parse(arg or {})
 print(opt)
 
 torch.manualSeed(opt.seed)
-
+torch.setnumthreads(1)
 --------------------------------------------------
 -- LOAD DATASET
 --------------------------------------------------
@@ -28,12 +29,18 @@ if false then
    telabels = data.labels:double()
    tedata = data.data:double()
 else
-   trdata,trlabels = loadData(opt.dataset,'train',10)
-   tedata,telabels = loadData(opt.dataset,'test',10)
+   if opt.dataset == 'cifar' then 
+      trdata,trlabels = loadData('cifar','train')
+      tedata,telabels = loadData('cifar','test')      
+   else
+      trdata,trlabels = loadData('mnist','train',10)
+      tedata,telabels = loadData('mnist','test',10)
+   end
 end
 nSamples = trdata:size(1)
 nInputs = trdata:size(2)
 print(trdata:size())
+print(tedata:size())
 ------------------------------------------------------------------
 -- DEFINE MODEL
 ------------------------------------------------------------------
@@ -62,7 +69,8 @@ criterion = nn.ClassNLLCriterion()
 params = {
    learningRate = opt.learningRate,
    weightDecay = 0,
-   learningRateDecay = 1/trdata:size(1)
+   learningRateDecay = 1/trdata:size(1),
+   weightDecay = opt.weightDecay
 }
 
 -------------------------------------------
@@ -136,6 +144,7 @@ for exp = 1,opt.nexper do
    results[exp].trainLoss = Ltrain
    results[exp].testLoss = Ltest
    print('\nExperiment took ' .. timer:time().real .. ' seconds\n')
+   collectgarbage()
 end	
 
 -- save results

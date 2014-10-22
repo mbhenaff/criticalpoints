@@ -1,5 +1,6 @@
 require 'nn'
 require 'gnuplot'
+dofile('csv.lua')
 
 cmd = torch.CmdLine()
 cmd:option('-dataset','cifar')
@@ -27,7 +28,8 @@ n = x[1].params:nElement()
 params = torch.Tensor(nseeds*nexper,n)
 
 cntr = 1
-for s = 1,nseeds do 
+for s = 1,nseeds do
+   --print(s)
    x = torch.load(path .. '/final_results_seed_' .. s .. '_nohessian_params.th')
    for i = 1,nexper do
       train_loss[cntr] = x[i].train_loss
@@ -46,5 +48,9 @@ print('std for train_acc : ' .. torch.std(train_acc))
 print('std for test_acc  : ' .. torch.std(test_acc))
 
 torch.save(path .. '/final_results_all.th',{train_loss=train_loss,test_loss=test_loss,train_acc=train_acc,test_acc=test_acc})
+writeCSV(path .. '/final_results_train_loss.csv',train_loss)
+writeCSV(path .. '/final_results_test_loss.csv',test_loss)
+writeCSV(path .. '/final_results_train_acc.csv',train_acc)
+writeCSV(path .. '/final_results_test_acc.csv',test_acc)
 
    

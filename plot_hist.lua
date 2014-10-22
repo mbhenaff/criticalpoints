@@ -1,9 +1,9 @@
 require 'torch'
 require 'gnuplot'
 
-dataset = 'cifar'
+dataset = 'mnist'
 nlayers = 1
-nhidden = {5,10,25,50}
+nhidden = {2,3,5,10,25,50}
 r = {}
 
 for i = 1,4 do

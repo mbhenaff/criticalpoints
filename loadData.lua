@@ -6,7 +6,7 @@ require 'image'
 require 'utils'
 
 function loadData(dataset,split,subsample,twoclass) 
-   local subsample = subsample or 10
+   local subsample = subsample or nil
    local f
    print(dataset)
    if dataset == 'cifar' then
@@ -29,6 +29,7 @@ function loadData(dataset,split,subsample,twoclass)
    local data = f.data
    print(data:size())
    if subsample then
+      print('subsampling')
       data2 = torch.Tensor(data:size(1),data:size(2),subsample,subsample)
       for i = 1,data:size(1) do 
 	 data2[i]:copy(image.scale(data[i],subsample,subsample))
@@ -52,7 +53,7 @@ function loadData(dataset,split,subsample,twoclass)
       data = data2
       labels = labels2
    end
-   return data,labels:double()
+   return data:double(),labels:double()
 end
 
 

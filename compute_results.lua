@@ -15,11 +15,16 @@ cmd:option('-hessian',false)
 cmd:option('-params',true)
 opt = cmd:parse(arg or {})
 print(opt)
-
+torch.setnumthreads(1)
 path = '/scratch/mbh305/criticalpoints/results/' .. opt.dataset ..  '/nlayers_' .. opt.nlayers .. '_nhidden_' .. opt.nhidden
 
-trdata,trlabels = loadData(opt.dataset,'train',10)
-tedata,telabels = loadData(opt.dataset,'test',10)
+if opt.dataset == 'cifar' then
+   trdata,trlabels = loadData(opt.dataset,'train')
+   tedata,telabels = loadData(opt.dataset,'test')
+else
+   trdata,trlabels = loadData(opt.dataset,'train',10)
+   tedata,telabels = loadData(opt.dataset,'test',10)
+end
 
 criterion = nn.ClassNLLCriterion()
 x = torch.load(path .. '/seed_' .. opt.seed .. '_epoch_100.th')
