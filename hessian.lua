@@ -9,7 +9,7 @@ function hessian(model, criterion, inputs, labels)
    local H = torch.Tensor(n,n)
    local eps = 1e-6
    for i = 1,n do
-      if (i % 100) == 0 then
+      if (i % 5) == 0 then
 	 print(i .. ' / ' .. n)
       end
       -- function to perform gradient eval

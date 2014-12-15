@@ -24,6 +24,8 @@ function loadData(dataset,split,subsample,twoclass)
       else
 	 error('set should be train or test')
       end
+   elseif dataset == 'reuters' then
+      f = torch.load('/scratch/mbh305/criticalpoints/data/reuters_50/' .. split .. '.th')
    end
    local labels = f.labels
    local data = f.data
@@ -36,7 +38,9 @@ function loadData(dataset,split,subsample,twoclass)
       end
       data = data2
    end
-   data = data:resize(data:size(1),data:size(2)*data:size(3)*data:size(4))
+   if dataset ~= 'reuters' then
+      data = data:resize(data:size(1),data:size(2)*data:size(3)*data:size(4))
+   end
 
    if twoclass then
       indx = torch.find(torch.eq(labels,5) + torch.eq(labels,10))

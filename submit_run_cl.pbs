@@ -8,7 +8,7 @@
 
 cd /home/mbh305/criticalpoints
 
-/home/mbh305/lib/torch/installed/bin/torch-qlua runCl.lua -dataset ${dataset} -nlayers ${layers} -nhidden ${hidden} -nexper ${nexp} -seed ${seed} &> outputs/run_cl_layers_${layers}_hidden_${hidden}_nexp_${nexp}_seed_${seed}.txt
+/home/mbh305/lib/torch/installed/bin/torch-qlua runCl.lua -dataset ${dataset} -nlayers ${layers} -nhidden ${hidden} -nexper ${nexp} -seed ${seed} -weightDecay ${weight_decay} &> outputs/${dataset}_run_cl_layers_${layers}_hidden_${hidden}_nexp_${nexp}_seed_${seed}.txt
 
 exit 0;
 
